@@ -1,0 +1,47 @@
+% Preallocation
+time = zeros(4,2);
+k = 0;
+
+% for-loop for matrices with size 2.^[7:10]
+for n = 7:1:10
+    
+    % variable k is used in order to access matrix time
+    k = k + 1;
+    
+	A = rand(2.^n);
+    b = rand(2.^n,1);
+	
+	% These executions are not considered
+    tic;
+    toc;
+	[L,U] = lu(A);
+    y = A*b;
+       
+	% counting lu(X)
+	tic;
+	[L,U] = lu(A);
+	time(k,1) = toc;
+    
+    % counting A*b
+    tic;
+    y = A*b;
+    time(k,2) = toc;
+
+end
+
+time
+
+T = [128 256 512 1024];
+figure
+semilogy(T,time(:,1),'go-','linewidth',1,'markersize',10);
+%plot(T,time(:,1),'go-','linewidth',1,'markersize',10);
+hold on
+semilogy(T,time(:,2),'rx-','linewidth',1,'markersize',10);
+%plot(T,time(:,2),'rx-','linewidth',1,'markersize',10);
+legend('lu(A)','A*b','Location','NorthWest')
+xlabel('Matrix Dimensions')
+ylabel('Time (sec)')
+title('2.ii.a')
+grid on
+print(gcf, '-djpeg', 'ex2iia.jpg')
+hold off
